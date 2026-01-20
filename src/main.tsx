@@ -4,10 +4,17 @@ import './index.css'
 import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ClerkProvider } from '@clerk/clerk-react'
+import Workspace from './workspace/index.tsx';
+import Project from './workspace/project/index.tsx';
 
 
 const router = createBrowserRouter([
-  { path: "/", element: <App /> }
+  { path: "/", element: <App /> },
+  { path: "/workspace", element: <Workspace />,
+    children: [
+      { path: "project", element: <Project /> }
+    ]
+   },
 ])
 
 // Import your Publishable Key

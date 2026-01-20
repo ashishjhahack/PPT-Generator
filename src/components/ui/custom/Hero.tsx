@@ -3,6 +3,7 @@ import { Button } from '../button'
 import { Play } from 'lucide-react'
 import { HeroVideoDialog } from '../hero-video-dialog'
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
+import { Link } from 'react-router-dom';
 
 
 const Hero = () => {
@@ -16,7 +17,7 @@ const Hero = () => {
             <p className='text-xl text-gray-500 max-w-2xl text-center'>Generate sleek, editable PPTs powered by AI. Save hours on design, focus on your story. AI handles slide creation, layout, visual content and design, so you can impress your audience that work smarter not harder.</p>
             <div className='flex gap-5 mt-10'>
                 <Button variant={'outline'} size={'lg'}>Watch Video <Play /></Button>
-                {!user ? <SignInButton mode='modal'><Button size={'lg'}>Get Started</Button></SignInButton> : <Button size={'lg'}>Go to Workspace</Button>}
+                {!user ? <SignInButton mode='modal'><Button size={'lg'}>Get Started</Button></SignInButton> : <Link to="/workspace"><Button size={'lg'}>Go to Workspace</Button></Link>}
             </div>
             <div className="relative max-w-3xl mt-14">
                 <h2 className='text-center my-4'>Watch how to Create AI PPT</h2>
