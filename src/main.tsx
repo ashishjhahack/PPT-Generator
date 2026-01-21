@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
@@ -6,15 +6,17 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ClerkProvider } from '@clerk/clerk-react'
 import Workspace from './workspace/index.tsx';
 import Project from './workspace/project/index.tsx';
+import { UserDetailContext } from '../context/UserDetailContext.tsx';
 
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
-  { path: "/workspace", element: <Workspace />,
+  {
+    path: "/workspace", element: <Workspace />,
     children: [
       { path: "project", element: <Project /> }
     ]
-   },
+  },
 ])
 
 // Import your Publishable Key
@@ -25,11 +27,19 @@ if (!PUBLISHABLE_KEY) {
 }
 
 
+function Root() {
+  const [userDetail, setUserDetail] = useState();      // using context to share user detail across the app
+  return (
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+      <UserDetailContext.Provider value={{ userDetail, setUserDetail }}>    
+        <RouterProvider router={router} />
+      </UserDetailContext.Provider>
+    </ClerkProvider>
+  )
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-
-      <RouterProvider router={router} />
-    </ClerkProvider>
+    <Root />
   </StrictMode>,
 )
