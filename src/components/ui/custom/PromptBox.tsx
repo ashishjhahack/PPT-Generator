@@ -55,7 +55,7 @@ const PromptBox = () => {
                         {/* <InputGroupButton>
                             <PlusIcon />
                         </InputGroupButton> */}
-                        <Select onValueChange={(value) => setNoOfSliders(value)}>
+                        <Select defaultValue={noOfSliders} onValueChange={(value) => setNoOfSliders(value)}>
                             <SelectTrigger className="w-[180px] border-2 border-gray-400">
                                 <SelectValue placeholder="No. Of Slider" />
                             </SelectTrigger>

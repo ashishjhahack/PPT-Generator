@@ -37,7 +37,7 @@ const OutlineSection = ({ loading, outline, handleUpdateOutline }: Props) => {
                 ))}
             </div>
 
-            <Button size={'lg'} className='fixed bottom-6 transform left-1/2 -translate-x-0.5'>Generate Sliders <Sparkles /></Button>
+            
         </div>
     )
 }
