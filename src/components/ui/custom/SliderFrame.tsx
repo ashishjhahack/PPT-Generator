@@ -5,7 +5,9 @@ import { doc, setDoc } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 
 
-// It is a default HTML template for the iframe slider editor
+// It is a default HTML template for the iframe slider editor. iframe is used to render the slide content and allow users to edit it. 
+// The template includes Tailwind CSS for styling, Flowbite for UI components, Font Awesome for icons, Chart.js for charts, AOS and GSAP for animations, Lottie for JSON-based animations, and Swiper.js for sliders/carousels. 
+// It also has a placeholder for custom color codes and the actual slide code that will be rendered inside the iframe.
 const HTML_DEFAULT = `<!DOCTYPE html>       
 <html lang="en">
 <head>
@@ -67,17 +69,20 @@ const HTML_DEFAULT = `<!DOCTYPE html>
 </html>
 `
 
-
 type props = {
     slide: { code: string },
     colors: any,
     setUpdateSlider: any
 }
 
+// The SliderFrame component is responsible for rendering the slide content inside an iframe and allowing users to edit it.
+//  It uses the HTML_DEFAULT template to set up the iframe content, and then adds event listeners to enable interactive editing of the slide elements.
+//  When a user clicks on an element inside the iframe, it becomes editable, and a floating action tool appears nearby, allowing the user to enter AI prompts for editing that specific element. 
+// The component also handles updating the slide code in the parent component when edits are made.
 function SliderFrame({ slide, colors, setUpdateSlider }: props) {
 
     const { projectId } = useParams();
-    const FINAL_CODE = HTML_DEFAULT
+    const FINAL_CODE = HTML_DEFAULT               // it replaces the placeholders in the HTML_DEFAULT template with actual color codes and slide code.
         .replace("{colorCodes}", JSON.stringify(colors))
         .replace("{code}", slide?.code);
 
@@ -85,7 +90,7 @@ function SliderFrame({ slide, colors, setUpdateSlider }: props) {
 
     const [loading, setLoading] = useState(false);
     const selectedElRef = useRef<HTMLElement | null>(null);
-    const [cardPosition, setCardPosition] = useState<{ x: number, y: number } | null>(null)
+    const [cardPosition, setCardPosition] = useState<{ x: number, y: number } | null>(null)    // it is used to position the floating action tool based on the selected element inside the iframe. It stores the x and y coordinates for the tool's position. When a user clicks on an element inside the iframe, the tool will appear near that element, allowing for contextual editing options.
 
     useEffect(() => {
         if (!iframeRef.current) return;
@@ -152,14 +157,14 @@ function SliderFrame({ slide, colors, setUpdateSlider }: props) {
             const rect = target.getBoundingClientRect();
             const iframeRect = iframe.getBoundingClientRect();
 
-            setCardPosition({
+            setCardPosition({        // it sets the position of the floating action tool based on the position of the selected element inside the iframe. It calculates the position by getting the bounding rectangle of the selected element and the iframe, and then adjusting it to position the tool below the selected element.
                 x: iframeRect.left + rect.left + rect.width / 2,
                 y: iframeRect.top + rect.bottom
             })
 
         };
 
-        const handleBlur = () => {
+        const handleBlur = () => {   // it is a blur event handler that is triggered when the user finishes editing an element inside the iframe. It removes the outline and contenteditable attributes from the selected element, and then updates the slider code in the parent component with the new HTML content of the iframe.
             if (selectedEl) {
                 console.log("Final edited element:", selectedEl.outerHTML);
                 const updatedSliderCode = iframe.contentDocument?.body?.innerHTML
@@ -168,7 +173,7 @@ function SliderFrame({ slide, colors, setUpdateSlider }: props) {
             }
         };
 
-        const handleKeyDown = (e: KeyboardEvent) => {
+        const handleKeyDown = (e: KeyboardEvent) => {    // it is a keydown event handler that listens for the "Escape" key. When the user presses the "Escape" key, it exits the editing mode for the selected element by removing the outline and contenteditable attributes, and then sets the selected element to null.
             if (e.key === "Escape" && selectedEl) {
                 selectedEl.style.outline = "";
                 selectedEl.removeAttribute("contenteditable");
@@ -195,7 +200,7 @@ function SliderFrame({ slide, colors, setUpdateSlider }: props) {
         };
     }, [slide?.code]);
 
-    const handleAiSectionChange = async (userAiPrompt: string) => {
+    const handleAiSectionChange = async (userAiPrompt: string) => {      // it is a function that handles the AI-based editing of a selected element inside the iframe. When a user enters a prompt in the floating action tool, this function is called with the user's input. It builds an AI prompt that includes the user's instruction and the current HTML of the selected element, and then sends this prompt to the GeminiModel to generate new HTML content. Once the new HTML is received, it replaces only the selected element in the iframe with the newly generated content, allowing for targeted AI-driven edits without affecting the entire slide.
         setLoading(true);
         const selectedEl = selectedElRef.current;
         const iframe = iframeRef.current;
@@ -205,8 +210,7 @@ function SliderFrame({ slide, colors, setUpdateSlider }: props) {
         // Get the current HTML of the selected element
         const oldHTML = selectedEl.outerHTML;
 
-        // Build AI prompt
-
+        // Build AI prompt with ImageKit integration for image editing based on user instructions
         const prompt = `
   Regenerate or rewrite the following HTML code based on this user instruction.
   If user asked to change the image/regenerate the image then make sure to use
@@ -231,12 +235,12 @@ by providing ?tr=fo-auto,<other transfromation> etc.
                 tempDiv.innerHTML = newHTML;
                 const newNode = tempDiv.firstElementChild;
 
-                if (newNode && selectedEl.parentNode) {
+                if (newNode && selectedEl.parentNode) {    // it checks if the new HTML generated by the AI is valid and if the selected element has a parent node. If both conditions are met, it replaces only the selected element in the iframe with the newly generated content, allowing for targeted AI-driven edits without affecting the entire slide.
                     selectedEl.parentNode.replaceChild(newNode, selectedEl);
                     selectedElRef.current = newNode as HTMLElement;
                     console.log("✅ Element replaced successfully");
 
-                    const updatedSliderCode = iframe.contentDocument?.body?.innerHTML || newHTML
+                    const updatedSliderCode = iframe.contentDocument?.body?.innerHTML || newHTML    // it updates the slider code in the parent component with the new HTML content of the iframe after the AI-based edit is made. It retrieves the updated HTML from the iframe's body and then calls the setUpdateSlider function to update the state in the parent component, ensuring that the changes are reflected in the overall slide code.
                     console.log(updatedSliderCode);
                     setUpdateSlider(updatedSliderCode)
                 }

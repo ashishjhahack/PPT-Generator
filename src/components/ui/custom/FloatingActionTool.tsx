@@ -9,9 +9,13 @@ type Props = {
     loading: boolean
 }
 
-function FloatingActionTool({ position, onClose, handleAiChange, loading }: Props) {
+// This component is a floating action tool that appears when a user clicks on an element inside the iframe slider editor. 
+// It allows users to edit the selected element with AI by entering a prompt. 
+// The tool includes an input field for the AI prompt, a button to submit the prompt, and a loading indicator while the AI processes the request. 
+// The position of the tool is dynamically set based on the location of the selected element within the iframe, providing a contextual editing experience.
+function FloatingActionTool({ position, onClose, handleAiChange, loading }: Props) {     
 
-    const [userAiPrompt, setUserAiPromot] = useState<string>()
+    const [userAiPrompt, setUserAiPrompt] = useState<string>()
     if (!position) return;
     return (
         <div className='absolute z-50 bg-white  text-sm
@@ -27,12 +31,12 @@ function FloatingActionTool({ position, onClose, handleAiChange, loading }: Prop
                 <Sparkles className='h-4 2-4' />
                 <input type='text' placeholder='Edit with AI'
                     className='outline-none border-none'
-                    onChange={(event) => setUserAiPromot(event.target.value)}
+                    onChange={(event) => setUserAiPrompt(event.target.value)}
                     disabled={loading}
                     value={userAiPrompt}
                 />
                 {userAiPrompt &&
-                    <Button variant={'ghost'} size={'icon-sm'} onClick={() => { handleAiChange(userAiPrompt); setUserAiPromot('') }}>
+                    <Button variant={'ghost'} size={'icon-sm'} onClick={() => { handleAiChange(userAiPrompt); setUserAiPrompt('') }}>
                         <ArrowRight className='h-4 w-4' />
 
                     </Button>}

@@ -1,10 +1,14 @@
 import OutlineSection from '@/components/ui/custom/OutlineSection';
 import { firebaseDb, GeminiAiLiveModel } from './../../../../config/FirebaseConfig';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import type { Project } from '../outline';
 import SliderFrame from '@/components/ui/custom/SliderFrame';
+import { Button } from '@/components/ui/button';
+import { FileDown, Loader2 } from 'lucide-react';
+import htmlToImage from 'html-to-image';
+import PptxGenJS from 'pptxgenjs';
 
 // This prompt is used to generate slide code using Gemini AI Live Model. It includes instructions for design style, colors, metadata, and specific requirements for the slide content and layout.
 const SLIDER_PROMPT = `Generate HTML (TailwindCSS + Flowbite UI + Lucide Icons) 
@@ -95,6 +99,8 @@ function Editor() {
     const [loading, setLoading] = useState(false);
     const [sliders, setSliders] = useState<any>([]);      // to store all the sliders
     const [isSlidesGenerated, setIsSlidesGenerated] = useState<any>();       // to track when slides are generated
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const [downloadLoading, setDownloadLoading] = useState(false);
 
     useEffect(() => {    // This useEffect is used to fetch project detail on load
         projectId && GetProjectDetail()
@@ -124,9 +130,9 @@ function Editor() {
      * Generates slides one by one using the Gemini AI Live Model.
      * It iterates through the project outline and replaces placeholders in the SLIDER_PROMPT.
     */
-     
+
     const GenerateSlides = async () => {
-        if (!projectDetail?.outline || projectDetail.outline.length === 0) return; 
+        if (!projectDetail?.outline || projectDetail.outline.length === 0) return;
 
         console.log("🚀 Starting slide generation...");
 
@@ -220,7 +226,38 @@ function Editor() {
         setIsSlidesGenerated(Date.now())
     }
 
+    const exportAllIframesToPPT = async () => {        // This function is used to export all the slides (iframes) to a PPT file. It uses the html-to-image library to convert each iframe content to an image and then uses PptxGenJS to create a PPT file with those images.
+        if (!containerRef.current) return;
+        setDownloadLoading(true);
+        const pptx = new PptxGenJS();
+        const iframes = containerRef.current.querySelectorAll("iframe");
 
+        for (let i = 0; i < iframes.length; i++) {
+            const iframe = iframes[i] as HTMLIFrameElement;
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+            if (!iframeDoc) continue;
+
+            // Grab the main slide element inside the iframe (usually <body> or inner div)
+            const slideNode =
+                iframeDoc.querySelector("body > div") || iframeDoc.body;
+            if (!slideNode) continue;
+
+            console.log(`Exporting slide ${i + 1}...`);
+            //@ts-ignore
+            const dataUrl = await htmlToImage.toPng(slideNode, { quality: 1 });
+
+            const slide = pptx.addSlide();
+            slide.addImage({
+                data: dataUrl,
+                x: 0,
+                y: 0,
+                w: 10,
+                h: 5.625,
+            });
+        }
+        setDownloadLoading(false);
+        pptx.writeFile({ fileName: "MyProjectSlides.pptx" });
+    };
 
 
     return (
@@ -232,7 +269,7 @@ function Editor() {
                     loading={loading}
                 />
             </div>
-            <div className='col-span-3 h-screen overflow-auto'>
+            <div className='col-span-3 h-screen overflow-auto' ref={containerRef}>
                 {/* Slides  */}
                 {sliders?.map((slide: any, index: number) => (
                     <SliderFrame slide={slide} key={index}
@@ -241,8 +278,9 @@ function Editor() {
                     />
 
                 ))}
-
             </div>
+            {/* Export Button  */}
+            <Button onClick={exportAllIframesToPPT} size={'lg'} disabled={downloadLoading} className='fixed bottom-6 transform left-1/2 -translate-x-1/2'>{downloadLoading ? <Loader2 className='animate-spin' /> : <FileDown />} Export PPT</Button>
         </div>
     )
 }
