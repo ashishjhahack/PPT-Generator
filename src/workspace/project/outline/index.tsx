@@ -9,8 +9,6 @@ import { Loader2Icon, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 
-
-
 const Outline_Prompt = 
 `
 Generate a PowerPoint slide outline for the topic {userInput}.
@@ -28,20 +26,25 @@ Return the response only in JSON format, following this schema:
  }
 ]
 `
-
-type Project = {
-    projectId: string;
-    userInputPrompt: string;
-    createdBy: string;
-    noOfSliders: string;
-    outline: Outline[];
-    createdAt: number;
+export type Project = {
+    userInputPrompt: string,
+    projectId: string,
+    createdAt: string,
+    noOfSliders: string,
+    outline: Outline[],
+    slides: any[],
+    designStyle: DesignStyle
+}
+export type Outline = {
+    slideNo: string,
+    slidePoint: string,
+    outline: string
 }
 
-export type Outline = {
-    slideNo: string;
-    slidePoint: string;
-    outline: string;
+export type DesignStyle = {
+    colors: any,
+    designGuide: string,
+    styleName: string
 }
 
 const Outline = () => {
@@ -50,7 +53,7 @@ const Outline = () => {
     const [loading, setLoading] = React.useState(false);
     const [UpdateDbLoading, setUpdateDbLoading] = React.useState(false);
     const [outline, setOutline] = React.useState<Outline[]>();
-    const [selectedStyle, setSelectedStyle] = React.useState<designStyle>();  
+    const [selectedStyle, setSelectedStyle] = React.useState<DesignStyle>();  
 
 
     useEffect(() => {
@@ -112,13 +115,14 @@ const Outline = () => {
         setUpdateDbLoading(false);
 
         // navigate to slider-editor
+        
     }
 
     return (
         <div className='flex justify-center mt-20'>
             <div className='max-w-3xl w-full'>
                 <h2 className='font-bold text-2xl '>Settings and Sliders Outline</h2>
-                <SlidersStyle selectStyle={(value: designStyle)=>setSelectedStyle(value)}/>
+                <SlidersStyle selectStyle={(value: DesignStyle)=>setSelectedStyle(value)}/>
                 <OutlineSection loading={loading} outline={outline || []} handleUpdateOutline={(index:string, value:Outline) => handleUpdateOutline(index, value)}/>
             </div>
             <Button onClick={onGenerateSlider} size={'lg'} disabled={UpdateDbLoading || loading} className='fixed bottom-6 transform left-1/2 -translate-x-0.5'>{UpdateDbLoading && <Loader2Icon className='animate-spin'/>}Generate Sliders <Sparkles /></Button>

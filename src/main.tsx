@@ -7,6 +7,7 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import Workspace from './workspace/index.tsx';
 import { UserDetailContext } from '../context/UserDetailContext.tsx';
 import Outline from './workspace/project/outline/index.tsx';
+import Editor from './workspace/project/editor/index.tsx';
 
 
 const router = createBrowserRouter([
@@ -14,7 +15,8 @@ const router = createBrowserRouter([
   {
     path: "/workspace", element: <Workspace />,
     children: [
-      { path: "project/:projectId/outline", element: <Outline /> }
+      { path: "project/:projectId/outline", element: <Outline /> },
+      { path: "project/:projectId/editor", element: <Editor /> }
     ]
   },
 ])
