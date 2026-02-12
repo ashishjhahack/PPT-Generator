@@ -17,7 +17,7 @@ const Header = () => {
   return (
     <div>
       <div className='flex justify-between items-center px-10 shadow'>
-        <img src={logo} alt="logo" height={130} width={130} />
+        <Link to="/"><img src={logo} alt="logo" height={130} width={130} /></Link>
         {!user ?
           <SignInButton mode='modal'>
             <Button>Get Started</Button>

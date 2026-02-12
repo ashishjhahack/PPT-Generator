@@ -8,13 +8,14 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from "@/components/ui/empty"
-import { ArrowRight, ArrowUpRightIcon, FolderIcon, Icon, Link } from 'lucide-react'
+import { ArrowRight, ArrowUpRightIcon, FolderIcon, Icon} from 'lucide-react'
 import { useUser } from '@clerk/clerk-react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { firebaseDb } from '../../../../config/FirebaseConfig';
 import type { Project } from '@/workspace/project/outline';
-import PPT_ICON from '../../../../assets/ppt_icon.png';
+import PPT_ICON from '../../../assets/ppt.png';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 
 const MyProjects = () => {

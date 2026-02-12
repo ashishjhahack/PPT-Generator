@@ -1,5 +1,5 @@
 import OutlineSection from '@/components/ui/custom/OutlineSection';
-import { firebaseDb, GeminiAiLiveModel } from './../../../../config/FirebaseConfig';
+import { firebaseDb, GeminiModel } from './../../../../config/FirebaseConfig';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -7,7 +7,7 @@ import type { Project } from '../outline';
 import SliderFrame from '@/components/ui/custom/SliderFrame';
 import { Button } from '@/components/ui/button';
 import { FileDown, Loader2 } from 'lucide-react';
-import htmlToImage from 'html-to-image';
+import * as htmlToImage from 'html-to-image';
 import PptxGenJS from 'pptxgenjs';
 
 // This prompt is used to generate slide code using Gemini AI Live Model. It includes instructions for design style, colors, metadata, and specific requirements for the slide content and layout.
@@ -139,7 +139,7 @@ function Editor() {
         // Optional: initialize sliders to empty states
         // setSliders(projectDetail.outline.map(() => ({ code: "" })));
 
-        for (let index = 0; index < projectDetail.outline.length && index < 3; index++) {    // limiting to 3 slides for demo
+        for (let index = 0; index < projectDetail.outline.length; index++) {    // generate all slides
             const metaData = projectDetail.outline[index];     // get metadata for the current slide
 
             const prompt = SLIDER_PROMPT     // replace placeholders in the prompt which is used to generate slide
@@ -158,43 +158,26 @@ function Editor() {
     };
 
 
-    // This function handles the Gemini AI Live Model call for generating a single slide
+    // This function handles the Gemini AI call for generating a single slide
     const GeminiSlideCall = async (prompt: string, index: number) => {
         try {
-            const session = await GeminiAiLiveModel.connect();
-            await session.send(prompt);
+            const result = await GeminiModel.generateContent(prompt);
+            const response = result.response;
+            const text = response.text();
 
-            // Initialize text variable and collect text from model
-            let text = "";
+            const finalText = text    // clean up the text
+                .replace(/```html/g, "")
+                .replace(/```/g, "")
+                .trim();
 
-            // Read stream
-            for await (const message of session.receive()) {
-                if (message.type === "serverContent") {
-                    const parts = message.modelTurn?.parts;   // get parts of the message
-                    if (parts && parts.length > 0) {
-                        text += parts?.map((p) => p.text).join("");     // append text parts
+            // Update the slider with generated code
+            setSliders((prev: any[]) => {
+                const updated = prev ? [...prev] : [];
+                updated[index] = { code: finalText };
+                return updated;
+            });
 
-                        const finalText = text    // clean up the text by which we will update slide code
-                            .replace(/```html/g, "")
-                            .replace(/```/g, "")
-                            .trim();
-
-                        // Live update the slider
-                        setSliders((prev: any[]) => {
-                            const updated = prev ? [...prev] : [];
-                            updated[index] = { code: finalText };
-                            return updated;
-                        });
-                    }
-
-                    if (message.turnComplete) {
-                        console.log("✅ Slide", index + 1, "complete");
-                        break; // important: exit loop when done
-                    }
-                }
-            }
-
-            session.close();
+            console.log("✅ Slide", index + 1, "complete");
         } catch (err) {
             console.error("❌ Error generating slide", index + 1, err);
         }
@@ -262,14 +245,14 @@ function Editor() {
 
     return (
         <div className='grid grid-cols-5 p-10 gap-10 '>
-            <div className='col-span-2 h-[90vh] overflow-auto'>
+            <div className='col-span-2 h-[90vh] overflow-auto scrollbar-hide'>
                 {/* Outlines  */}
                 <OutlineSection outline={projectDetail?.outline ?? []}
                     handleUpdateOutline={() => console.log()}
                     loading={loading}
                 />
             </div>
-            <div className='col-span-3 h-screen overflow-auto' ref={containerRef}>
+            <div className='col-span-3 h-screen overflow-auto scrollbar-hide' ref={containerRef}>
                 {/* Slides  */}
                 {sliders?.map((slide: any, index: number) => (
                     <SliderFrame slide={slide} key={index}

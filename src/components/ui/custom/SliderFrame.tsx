@@ -24,7 +24,7 @@ const HTML_DEFAULT = `<!DOCTYPE html>
   tailwind.config = {
     theme: {
       extend: {
-        colors: {colorCodes},    // have to replace this
+        colors: {colorCodes},
         backgroundImage: {
           gradient: 'linear-gradient(90deg, #6366F1 0%, #10B981 100%)', // Primary → Secondary
         },
@@ -63,7 +63,7 @@ const HTML_DEFAULT = `<!DOCTYPE html>
   <script src="https://unpkg.com/tippy.js@6"></script>
 </head>
 
-{code}     // have to replace this
+{code}
 
 
 </html>
