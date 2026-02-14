@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '../button'
 import {
     Empty,
@@ -8,7 +8,7 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from "@/components/ui/empty"
-import { ArrowRight, ArrowUpRightIcon, FolderIcon, Icon} from 'lucide-react'
+import { ArrowRight, FolderIcon} from 'lucide-react'
 import { useUser } from '@clerk/clerk-react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { firebaseDb } from '../../../../config/FirebaseConfig';

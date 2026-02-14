@@ -1,8 +1,8 @@
-import React from 'react'
+
 import { Button } from '../button'
 import { Play } from 'lucide-react'
 import { HeroVideoDialog } from '../hero-video-dialog'
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
+import {  SignInButton, useUser } from '@clerk/clerk-react';
 import { Link } from 'react-router-dom';
 
 

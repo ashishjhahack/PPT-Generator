@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import logo from '@/assets/logo.png'
 import { Button } from '../button'
 import { useUser, SignInButton, UserButton } from '@clerk/clerk-react';
 import { Link, useLocation } from 'react-router-dom';
 import { UserDetailContext } from '../../../../context/UserDetailContext';
-import { Diamond, Gem } from 'lucide-react';
+import { Gem } from 'lucide-react';
 import { ModeToggle } from './mode-toggle';
 
 

@@ -1,7 +1,7 @@
-import React from 'react'
+
 import { Skeleton } from '../skeleton';
 import type { Outline } from '@/workspace/project/outline';
-import { Edit, Sparkles } from 'lucide-react';
+import { Edit } from 'lucide-react';
 import { Button } from '../button';
 import EditOutlineDialog from './EditOutlineDialog';
 

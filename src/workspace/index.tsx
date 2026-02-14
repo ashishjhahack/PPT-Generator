@@ -1,5 +1,5 @@
 import { useUser } from '@clerk/clerk-react';
-import React, { useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { Button } from '../components/ui/button';
 import { doc, getDoc, setDoc } from 'firebase/firestore';

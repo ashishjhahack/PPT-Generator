@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useUser } from '@clerk/clerk-react';
 import {
     InputGroup,

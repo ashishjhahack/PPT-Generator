@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button } from '../button';
-import { ArrowRight, Loader, Loader2Icon, Sparkles, X } from 'lucide-react';
+import { ArrowRight, Loader2Icon, Sparkles, X } from 'lucide-react';
 
 type Props = {
     position: { x: number, y: number } | null,
