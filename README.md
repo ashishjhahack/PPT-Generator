@@ -1,73 +1,145 @@
-# React + TypeScript + Vite
+# AI PPT Generator 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An AI-powered PowerPoint generator that creates professional presentations instantly from user input.
+This web app uses **Gemini AI** to generate slide content and **ImageKit** to handle image optimization, delivering fast, clean, and visually appealing presentations.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Live Demo
 
-## React Compiler
+*(Add your deployed link here)*
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📌 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* ✨ Generate complete presentations using **AI (Gemini)**
+* 🧠 Automatic slide content creation (titles, bullet points)
+* 🖼️ AI-relevant image integration via **ImageKit**
+* 🔐 Secure authentication using **Clerk**
+* ⚡ Fast and responsive UI with **React + Tailwind**
+* 📄 Download or view generated PPT content
+* 🔥 Cloud data management using **Firebase**
+* 🌙 Modern UI with dark/light theme support
+* 📱 Fully responsive design
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Frontend
+
+* React
+* TypeScript
+* Tailwind CSS
+
+### Backend / Services
+
+* Firebase (Database / Hosting)
+* Clerk (Authentication)
+* Gemini API (AI content generation)
+* ImageKit.io (Image optimization & delivery)
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/ashishjhahack/PPT-Generator.git
+cd PPT-Generator
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2️⃣ Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+### 3️⃣ Setup Environment Variables
+
+Create a `.env` file and add:
+
+```
+VITE_CLERK_PUBLISHABLE_KEY=your_clerk_key
+VITE_FIREBASE_API_KEY=your_firebase_key
+VITE_FIREBASE_AUTH_DOMAIN=your_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_GEMINI_API_KEY=your_gemini_key
+VITE_IMAGEKIT_PUBLIC_KEY=your_imagekit_key
+VITE_IMAGEKIT_URL_ENDPOINT=your_imagekit_url
+```
+
+---
+
+### 4️⃣ Run the project
+
+```bash
+npm run dev
+```
+
+App will run on:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🔐 Authentication
+
+User authentication is handled using **Clerk**, providing:
+
+* Secure login/signup
+* Session management
+* Protected routes
+
+---
+
+## 🧠 How It Works
+
+1. User enters a presentation topic.
+2. Gemini AI generates structured slide content.
+3. Relevant images are fetched and optimized via ImageKit.
+4. Slides are displayed in a presentation format.
+5. Data is stored and managed using Firebase.
+
+---
+
+## 🚀 Future Improvements
+
+* PPT download (.pptx) support
+* Multiple presentation templates
+* AI design themes
+* Export to Google Slides
+* Team collaboration feature
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repo
+2. Create a new branch
+3. Commit your changes
+4. Open a Pull Request
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 👨‍💻 Author
+
+**Ashish Jha**
+
+* GitHub: https://github.com/ashishjhahack
+
+---
+
+⭐ If you like this project, please give it a star!
