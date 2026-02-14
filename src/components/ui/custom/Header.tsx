@@ -5,6 +5,7 @@ import { useUser, SignInButton, UserButton } from '@clerk/clerk-react';
 import { Link, useLocation } from 'react-router-dom';
 import { UserDetailContext } from '../../../../context/UserDetailContext';
 import { Diamond, Gem } from 'lucide-react';
+import { ModeToggle } from './mode-toggle';
 
 
 const Header = () => {
@@ -18,6 +19,7 @@ const Header = () => {
     <div>
       <div className='flex justify-between items-center px-10 shadow'>
         <Link to="/"><img src={logo} alt="logo" height={130} width={130} /></Link>
+        <ModeToggle />
         {!user ?
           <SignInButton mode='modal'>
             <Button>Get Started</Button>
